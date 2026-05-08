@@ -1,0 +1,22 @@
+# AWS Load Balancer Controller — valores customizados
+# Helm chart: https://aws.github.io/eks-charts | chart: aws-load-balancer-controller
+# Verificar versão mais recente: helm search repo eks/aws-load-balancer-controller
+
+clusterName: <CLUSTER_NAME>
+
+serviceAccount:
+  create: true
+  name: aws-load-balancer-controller
+
+replicaCount: 2
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi
+
+# EKS Pod Identity não requer anotações no ServiceAccount
+# A permissão IAM é configurada via Pod Identity Association na Etapa 09

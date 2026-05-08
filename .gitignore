@@ -1,0 +1,4 @@
+scripts/config.env
+scripts/config.ps1
+*.bak
+.DS_Store

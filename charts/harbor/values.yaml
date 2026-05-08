@@ -1,0 +1,94 @@
+# Harbor Registry — valores customizados (S3 backend + EKS Pod Identity)
+# Helm chart: https://helm.goharbor.io | chart: harbor
+# Verificar versão mais recente: helm search repo harbor/harbor
+
+expose:
+  type: clusterIP
+  tls:
+    # TLS terminado no ALB — desabilitado internamente
+    enabled: false
+
+# Substituir pelo hostname real do ALB após a etapa 09
+externalURL: https://<HARBOR_ALB_HOSTNAME>
+
+persistence:
+  enabled: true
+  resourcePolicy: "keep"
+  imageChartStorage:
+    type: s3
+    s3:
+      region: <AWS_REGION>
+      bucket: <HARBOR_S3_BUCKET>
+      # Sem accesskey/secretkey: credenciais via EKS Pod Identity
+      regionendpoint: https://s3.<AWS_REGION>.amazonaws.com
+
+database:
+  type: internal
+  internal:
+    storageClass: gp3
+    size: 5Gi
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+
+redis:
+  type: internal
+  internal:
+    storageClass: gp3
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+
+trivy:
+  enabled: true
+  storageClass: gp3
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+# Substituir pela senha gerada com: openssl rand -base64 24
+harborAdminPassword: "<HARBOR_ADMIN_PASSWORD>"
+
+metrics:
+  enabled: false
+
+core:
+  serviceAccountName: harbor-core
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+registry:
+  serviceAccountName: harbor-registry
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+jobservice:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi

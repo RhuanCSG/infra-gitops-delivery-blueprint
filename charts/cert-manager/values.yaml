@@ -1,0 +1,38 @@
+# cert-manager — valores customizados
+# Helm chart: https://charts.jetstack.io | chart: cert-manager
+# Verificar versão mais recente: helm search repo jetstack/cert-manager
+
+crds:
+  enabled: true
+
+replicaCount: 2
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi
+
+webhook:
+  resources:
+    requests:
+      cpu: 20m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+
+cainjector:
+  resources:
+    requests:
+      cpu: 20m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 256Mi
+
+global:
+  leaderElection:
+    namespace: cert-manager
