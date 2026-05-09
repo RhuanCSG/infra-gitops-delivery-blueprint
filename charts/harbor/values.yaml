@@ -58,8 +58,9 @@ trivy:
       cpu: 500m
       memory: 512Mi
 
-# Substituir pela senha gerada com: openssl rand -base64 24
-harborAdminPassword: "<HARBOR_ADMIN_PASSWORD>"
+# Senha gerenciada via Vault + ESO — não colocar aqui diretamente
+existingSecretAdminPassword: harbor-admin-secret
+existingSecretAdminPasswordKey: HARBOR_ADMIN_PASSWORD
 
 metrics:
   enabled: false

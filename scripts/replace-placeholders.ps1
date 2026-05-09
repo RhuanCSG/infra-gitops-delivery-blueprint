@@ -17,7 +17,7 @@ if (-not (Test-Path $ConfigFile)) {
 # Verificar variáveis obrigatórias
 $requiredVars = @(
     "AWS_ACCOUNT_ID", "CLUSTER_NAME", "AWS_REGION", "KMS_KEY_ARN",
-    "HARBOR_S3_BUCKET", "GITHUB_USERNAME", "HARBOR_ADMIN_PASSWORD", "HARBOR_ALB_HOSTNAME"
+    "HARBOR_S3_BUCKET", "GITHUB_USERNAME", "HARBOR_ALB_HOSTNAME"
 )
 
 foreach ($var in $requiredVars) {
@@ -35,7 +35,6 @@ $placeholders = @{
     "<KMS_KEY_ARN>"           = $KMS_KEY_ARN
     "<HARBOR_S3_BUCKET>"      = $HARBOR_S3_BUCKET
     "<GITHUB_USERNAME>"       = $GITHUB_USERNAME
-    "<HARBOR_ADMIN_PASSWORD>" = $HARBOR_ADMIN_PASSWORD
     "<HARBOR_ALB_HOSTNAME>"   = $HARBOR_ALB_HOSTNAME
 }
 
