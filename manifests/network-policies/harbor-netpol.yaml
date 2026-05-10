@@ -26,6 +26,8 @@ spec:
         - protocol: TCP
           port: 80
         - protocol: TCP
+          port: 8080
+        - protocol: TCP
           port: 443
         - protocol: TCP
           port: 5000
@@ -52,7 +54,7 @@ spec:
             matchLabels:
               kubernetes.io/metadata.name: harbor
 ---
-# Permite saída para S3 e Kubernetes API
+# Permite saída para S3, Kubernetes API e DNS
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -66,3 +68,12 @@ spec:
     - ports:
         - protocol: TCP
           port: 443
+    - ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+      to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system

@@ -30,7 +30,7 @@ spec:
         - protocol: TCP
           port: 10260
 ---
-# Permite saída para Let's Encrypt ACME e Kubernetes API
+# Permite saída para Let's Encrypt ACME, Kubernetes API e DNS
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -46,3 +46,12 @@ spec:
           port: 443
         - protocol: TCP
           port: 80
+    - ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+      to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
