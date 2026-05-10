@@ -102,20 +102,38 @@ O repositório foi projetado como **template**: faça fork, preencha seus valore
 
 ## Como funciona
 
-```
-  Você                 GitHub              ArgoCD              EKS Cluster
-   │                     │                   │                     │
-   │── git push ────────▶│                   │                     │
-   │                     │── webhook / poll ▶│                     │
-   │                     │                   │── reconcilia ──────▶│
-   │                     │                   │                     │
-   │                     │         sync waves (ordem garantida)    │
-   │                     │                   │                     │
-   │                     │          [0] namespaces + netpolicies   │
-   │                     │          [1] cert-manager + aws-lbc     │
-   │                     │          [2] external-secrets           │
-   │                     │          [3] vault                      │
-   │                     │          [4] harbor                     │
+```mermaid
+sequenceDiagram
+    actor Dev as Você
+    participant GH as GitHub
+    participant CD as ArgoCD
+    participant EKS as EKS Cluster
+
+    Dev->>GH: git push
+    GH-->>CD: webhook / poll 30s
+
+    rect rgb(240, 248, 255)
+        Note over CD,EKS: Wave 0 — Fundação do cluster
+        CD->>EKS: Namespaces · NetworkPolicies · StorageClass gp3
+    end
+    rect rgb(240, 248, 255)
+        Note over CD,EKS: Wave 1 — Infraestrutura de plataforma
+        CD->>EKS: cert-manager · AWS Load Balancer Controller
+    end
+    rect rgb(240, 248, 255)
+        Note over CD,EKS: Wave 2 — Sincronização de segredos
+        CD->>EKS: External Secrets Operator
+    end
+    rect rgb(240, 248, 255)
+        Note over CD,EKS: Wave 3 — Gerenciamento de segredos
+        CD->>EKS: Vault HA + Raft + KMS auto-unseal
+    end
+    rect rgb(240, 248, 255)
+        Note over CD,EKS: Wave 4 — Aplicações
+        CD->>EKS: Harbor + S3 backend
+    end
+
+    EKS-->>Dev: cluster sincronizado
 ```
 
 ---
